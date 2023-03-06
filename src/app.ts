@@ -75,10 +75,12 @@ const list = new ListTemplate(ul);
 form.addEventListener("submit", (e: Event) => {
   e.preventDefault();
 
+  let values: [string, string, number];
+  values = [tofrom.value, details.value, amount.valueAsNumber];
   let doc : HasFormatter;
 
   if(type.value === 'invoice'){
-    doc = new Invoice(tofrom.value, details.value, amount.valueAsNumber)
+    doc = new Invoice(...values)
   }else {
     doc = new Payment(tofrom.value, details.value, amount.valueAsNumber)
   }
@@ -88,32 +90,50 @@ form.addEventListener("submit", (e: Event) => {
 
 // GENERICS
 
-const addUID = <T extends object>(obj: T)=>{
-  let uid = Math.floor(Math.random() * 100);
-  return {...obj,uid};
-}
+// const addUID = <T extends object>(obj: T)=>{
+//   let uid = Math.floor(Math.random() * 100);
+//   return {...obj,uid};
+// }
 
-let docOnee = addUID({name: "yoshi", age: 20});
+// let docOnee = addUID({name: "yoshi", age: 20});
 
-console.log(docOnee.age);
+// console.log(docOnee.age);
 
-// with interface
+// // with interface
+// interface Resource<T> {
+//   uid: number,
+//   reourceName: string, 
+//   data: T
+// }
+
+// const docThreee: Resource<object> = {
+// uid: 1,
+// reourceName: 'person',
+// data:  {name: 'shaun'}
+// }
+
+// const docFour: Resource<string[]> = {
+//   uid: 2,
+//   reourceName: "dkdkd",
+//   data: ['a','b','c']
+// }
+
+// ENUMS
+
+enum ResourceType {Book,Flim,Director,Person}
+
 interface Resource<T> {
-  uid: number,
-  reourceName: string, 
-  data: T
+  uid: number;
+  resourceType: number;
+  data: T;
 }
 
-const docThreee: Resource<object> = {
-uid: 1,
-reourceName: 'person',
-data:  {name: 'shaun'}
+const docOnee: Resource<object> ={
+  uid: 1,
+  resourceType: ResourceType.Director,
+  data: {title: "name of the wind"}
 }
 
-const docFour: Resource<string[]> = {
-  uid: 2,
-  reourceName: "dkdkd",
-  data: ['a','b','c']
-}
 
-console.log(docThreee,docFour);
+console.log(docOnee);
+

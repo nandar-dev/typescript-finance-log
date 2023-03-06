@@ -50,9 +50,11 @@ const ul = document.querySelector('ul');
 const list = new ListTemplate(ul);
 form.addEventListener("submit", (e) => {
     e.preventDefault();
+    let values;
+    values = [tofrom.value, details.value, amount.valueAsNumber];
     let doc;
     if (type.value === 'invoice') {
-        doc = new Invoice(tofrom.value, details.value, amount.valueAsNumber);
+        doc = new Invoice(...values);
     }
     else {
         doc = new Payment(tofrom.value, details.value, amount.valueAsNumber);
@@ -60,20 +62,39 @@ form.addEventListener("submit", (e) => {
     list.render(doc, type.value, 'end');
 });
 // GENERICS
-const addUID = (obj) => {
-    let uid = Math.floor(Math.random() * 100);
-    return Object.assign(Object.assign({}, obj), { uid });
-};
-let docOnee = addUID({ name: "yoshi", age: 20 });
-console.log(docOnee.age);
-const docThreee = {
+// const addUID = <T extends object>(obj: T)=>{
+//   let uid = Math.floor(Math.random() * 100);
+//   return {...obj,uid};
+// }
+// let docOnee = addUID({name: "yoshi", age: 20});
+// console.log(docOnee.age);
+// // with interface
+// interface Resource<T> {
+//   uid: number,
+//   reourceName: string, 
+//   data: T
+// }
+// const docThreee: Resource<object> = {
+// uid: 1,
+// reourceName: 'person',
+// data:  {name: 'shaun'}
+// }
+// const docFour: Resource<string[]> = {
+//   uid: 2,
+//   reourceName: "dkdkd",
+//   data: ['a','b','c']
+// }
+// ENUMS
+var ResourceType;
+(function (ResourceType) {
+    ResourceType[ResourceType["Book"] = 0] = "Book";
+    ResourceType[ResourceType["Flim"] = 1] = "Flim";
+    ResourceType[ResourceType["Director"] = 2] = "Director";
+    ResourceType[ResourceType["Person"] = 3] = "Person";
+})(ResourceType || (ResourceType = {}));
+const docOnee = {
     uid: 1,
-    reourceName: 'person',
-    data: { name: 'shaun' }
+    resourceType: ResourceType.Director,
+    data: { title: "name of the wind" }
 };
-const docFour = {
-    uid: 2,
-    reourceName: "dkdkd",
-    data: ['a', 'b', 'c']
-};
-console.log(docThreee, docFour);
+console.log(docOnee);
